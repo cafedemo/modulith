@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: cafe
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cafe
+    username: appuser
+    password: S@ecret123
+    hikari:
+      schema: cafe
+  flyway:
+    enabled: on
+    locations: classpath:db
+    create-schemas: on
+    schemas: cafe
