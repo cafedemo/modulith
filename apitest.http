@@ -1,0 +1,34 @@
+GET {{url}}/
+Accept: application/json
+
+###
+GET {{url}}/11
+Accept: application/json
+
+###
+POST {{url}}/
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "John Doe",
+    "email": "testjohn@test.com",
+    "address": "123 Main St",
+    "phone": "555-555-5555"
+}
+
+###
+PUT {{url}}/
+Content-Type: application/json
+Accept: application/json
+
+{
+    "id": 11,
+    "name": "John Does",
+    "email": "testjohn2@test.com",
+    "address": "124 Main St",
+    "phone": "556-555-5555"
+}
+
+###
+DELETE {{url}}/11

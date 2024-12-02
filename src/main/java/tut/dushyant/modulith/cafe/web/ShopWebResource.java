@@ -1,8 +1,6 @@
 package tut.dushyant.modulith.cafe.web;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tut.dushyant.modulith.cafe.data.dto.Shop;
 import tut.dushyant.modulith.cafe.data.repo.ShopDBRepository;
 
@@ -21,5 +19,27 @@ public class ShopWebResource {
     @GetMapping("/")
     public List<Shop> getShopDetails() {
         return repo.getShops();
+    }
+
+    @PostMapping("/")
+    public Shop addShop(@RequestBody Shop shop) {
+        repo.addShop(shop);
+        return repo.getShop(shop);
+    }
+
+    @GetMapping("/{id}")
+    public Shop getShop(@PathVariable(name = "id")  int id) {
+        return repo.getShop(id);
+    }
+
+    @PutMapping("/")
+    public Shop updateShop(@RequestBody Shop shop) {
+        repo.updateShop(shop);
+        return repo.getShop(shop);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteShop(@PathVariable(name = "id") String id) {
+        repo.deleteShop(id);
     }
 }
