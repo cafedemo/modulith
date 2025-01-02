@@ -1,20 +1,28 @@
-package tut.dushyant.modulith.cafe.data.repo.impl;
+package tut.dushyant.modulith.cafe.shop.internal.data.repo.impl;
 
 import org.springframework.jdbc.JdbcUpdateAffectedIncorrectNumberOfRowsException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import tut.dushyant.modulith.cafe.data.dto.Shop;
-import tut.dushyant.modulith.cafe.data.repo.ShopDBRepository;
+
+import tut.dushyant.modulith.cafe.common.dto.shop.Shop;
+import tut.dushyant.modulith.cafe.shop.internal.data.repo.ShopDBRepository;
 
 import java.util.List;
 
+/**
+ * ShopDBRepositoryImpl is the implementation of ShopDBRepository
+ */
 @Repository
 public class ShopDBRepositoryImpl implements ShopDBRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
+    /**
+     * Constructor
+     * @param jdbcTemplate Database connection details
+     */
     public ShopDBRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -25,20 +33,36 @@ public class ShopDBRepositoryImpl implements ShopDBRepository {
      */
     @Override
     @Transactional
-    public void addShop(Shop shop) {
+    public Shop addShop(Shop shop) {
     int rows =
         jdbcTemplate.update(
             "INSERT INTO shop (name, address, phone, email)"
                 + " VALUES (:name, :address, :phone, :email)",
             new MapSqlParameterSource()
-                    .addValue("name", shop.name())
-                    .addValue("address", shop.address())
-                    .addValue("phone", shop.phone())
-                    .addValue("email", shop.email()));
+                    .addValue("name", shop.getName())
+                    .addValue("address", shop.getAddress())
+                    .addValue("phone", shop.getPhone())
+                    .addValue("email", shop.getEmail()));
 
         if (rows <=0 )
             throw new JdbcUpdateAffectedIncorrectNumberOfRowsException(
                 "Failed to insert shop", 1, rows);
+
+        return jdbcTemplate.query(
+            "SELECT id, name, address, phone, email FROM shop WHERE name = :name AND address = :address AND phone = :phone AND email = :email",
+            new MapSqlParameterSource()
+                    .addValue("name", shop.getName())
+                    .addValue("address", shop.getAddress())
+                    .addValue("phone", shop.getPhone())
+                    .addValue("email", shop.getEmail()),
+            (rs, rowNum) -> Shop.builder()
+                    .id(rs.getInt("id"))
+                    .name(rs.getString("name"))
+                    .address(rs.getString("address"))
+                    .phone(rs.getString("phone"))
+                    .email(rs.getString("email"))
+                    .build()
+        ).get(0);
     }
 
     /**
@@ -81,55 +105,30 @@ public class ShopDBRepositoryImpl implements ShopDBRepository {
     }
 
     /**
-    *
-     * @param shop Shop details to search database
-     * @return Shop from database based on input shop
-    */
-    @Override
-    public Shop getShop(Shop shop) {
-        return jdbcTemplate.queryForObject(
-                "SELECT id, name, address, phone, email FROM shop WHERE " +
-                        "name = :name AND address = :address AND phone = :phone AND email = :email",
-                new MapSqlParameterSource().addValue("name", shop.name())
-                        .addValue("address", shop.address())
-                        .addValue("phone", shop.phone())
-                        .addValue("email", shop.email()),
-                (rs, rowNum) -> Shop.builder()
-                            .id(rs.getInt("id"))
-                            .name(rs.getString("name"))
-                            .address(rs.getString("address"))
-                            .phone(rs.getString("phone"))
-                            .email(rs.getString("email"))
-                            .build()
-        );
-    }
-
-    /**
      * @param shop Shop details to update in database
      */
     @Override
     @Transactional
-    public void updateShop(Shop shop) {
-    int rows =
-        jdbcTemplate.update(
+    public Shop updateShop(Shop shop) {
+        int rows = jdbcTemplate.update(
             "UPDATE shop SET name = :name, address = :address, phone = :phone, email = :email WHERE id = :id",
             new MapSqlParameterSource()
-                    .addValue("name", shop.name())
-                    .addValue("address", shop.address())
-                    .addValue("phone", shop.phone())
-                    .addValue("email", shop.email())
-                    .addValue("id", shop.id()));
+                    .addValue("id", shop.getId())
+                    .addValue("name", shop.getName())
+                    .addValue("address", shop.getAddress())
+                    .addValue("phone", shop.getPhone())
+                    .addValue("email", shop.getEmail()));
 
         if (rows <= 0)
             throw new JdbcUpdateAffectedIncorrectNumberOfRowsException(
                 "Failed to update shop", 1, rows);
 
         //get updated row
-        jdbcTemplate.queryForObject(
-                "SELECT id, name, address, phone, email FROM shop WHERE id = :id",
-                new MapSqlParameterSource().addValue("id", shop.id()),
+        return jdbcTemplate.queryForObject(
+                "SELECT name, address, phone, email FROM shop WHERE id = :id",
+                new MapSqlParameterSource().addValue("id", shop.getId()),
                 (rs, rowNum) -> Shop.builder()
-                            .id(rs.getInt("id"))
+                            .id(shop.getId())
                             .name(rs.getString("name"))
                             .address(rs.getString("address"))
                             .phone(rs.getString("phone"))
@@ -144,7 +143,7 @@ public class ShopDBRepositoryImpl implements ShopDBRepository {
     */
     @Override
     @Transactional
-    public void deleteShop(String id) {
+    public void deleteShop(int id) {
         int rows = jdbcTemplate.update(
             "DELETE FROM shop WHERE id = :id",
             new MapSqlParameterSource().addValue("id", id));

@@ -1,6 +1,8 @@
 spring:
   application:
     name: cafe
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
   datasource:
     url: jdbc:postgresql://localhost:5432/cafe
     username: appuser
@@ -13,3 +15,14 @@ spring:
     locations: classpath:db
     create-schemas: on
     schemas: cafe
+  modulith:
+    events:
+      jdbc:
+        schema-initialization:
+          enabled: on
+        schema: cafe
+management:
+  server:
+    port: 8082
+server:
+  port: 8080

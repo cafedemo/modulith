@@ -1,34 +1,65 @@
-GET {{url}}/
+@url = http://localhost:8080/api
+
+GET {{url}}/shop
 Accept: application/json
 
 ###
-GET {{url}}/11
+GET {{url}}/shop/14
 Accept: application/json
 
 ###
-POST {{url}}/
+POST {{url}}/shop
 Content-Type: application/json
 Accept: application/json
 
 {
-    "name": "John Doe",
-    "email": "testjohn@test.com",
-    "address": "123 Main St",
-    "phone": "555-555-5555"
+  "name": "John Does",
+  "address": "1241 Main St",
+  "phone": "566-555-5555",
+  "email": "testjohn34@test.com"
 }
 
 ###
-PUT {{url}}/
+PUT {{url}}/shop
 Content-Type: application/json
 Accept: application/json
 
 {
-    "id": 11,
-    "name": "John Does",
+    "id": 7,
+    "name": "John Doesn",
     "email": "testjohn2@test.com",
     "address": "124 Main St",
     "phone": "556-555-5555"
 }
 
 ###
-DELETE {{url}}/11
+DELETE {{url}}/shop/14
+
+###
+GET {{url}}/barista
+Accept: application/json
+
+###
+POST {{url}}/barista
+Content-Type: application/json
+
+{
+  "name": "John Does2",
+  "email": "testjohns01@test.com",
+  "shopId": 14
+}
+
+###
+PUT {{url}}/barista
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": 18,
+  "name": "John Does",
+  "email": "testjohns242@test.com",
+  "shopId": 9
+}
+
+###
+DELETE {{url}}/barista/18

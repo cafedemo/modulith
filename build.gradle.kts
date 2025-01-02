@@ -1,13 +1,20 @@
 plugins {
 	java
-	id("org.springframework.boot") version "3.4.0"
-	id("io.spring.dependency-management") version "1.1.6"
-	id("org.cyclonedx.bom") version "1.10.0"
+	id("org.springframework.boot") version "3.4.1"
+	id("io.spring.dependency-management") version "1.1.7"
 	id("org.flywaydb.flyway") version "11.0.0"
 }
 
 group = "tut.dushyant.modulith"
-version = "0.0.1-SNAPSHOT"
+version = "1.0"
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+	maven {
+		url = uri("https://repo.spring.io/release")
+	}
+}
 
 java {
 	toolchain {
@@ -15,43 +22,43 @@ java {
 	}
 }
 
-repositories {
-	mavenCentral()
-}
-
-extra["springModulithVersion"] = "1.3.0"
-
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+
 	implementation("org.springframework.modulith:spring-modulith-starter-core")
 	implementation("org.springframework.modulith:spring-modulith-starter-jdbc")
-	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
-//	runtimeOnly("io.micrometer:micrometer-registry-otlp")
+	implementation("org.springframework.modulith:spring-modulith-events-jdbc")
+	implementation("org.springframework.modulith:spring-modulith-events-api")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
 	runtimeOnly("org.postgresql:postgresql")
+	runtimeOnly("org.springframework.boot:spring-boot-starter-actuator")
 	runtimeOnly("org.springframework.modulith:spring-modulith-actuator")
-//	runtimeOnly("org.springframework.modulith:spring-modulith-observability")
+	runtimeOnly("org.springframework.modulith:spring-modulith-observability")
+	runtimeOnly("org.flywaydb:flyway-database-postgresql:11.0.0")
+	runtimeOnly("org.springframework.modulith:spring-modulith-runtime")
+	runtimeOnly("org.springframework.modulith:spring-modulith-starter-insight")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.modulith:spring-modulith-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	runtimeOnly("org.flywaydb:flyway-database-postgresql:11.0.0")
+
+	// lombok
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 }
 
 dependencyManagement {
 	imports {
-		mavenBom("org.springframework.modulith:spring-modulith-bom:${property("springModulithVersion")}")
+		mavenBom("org.springframework.modulith:spring-modulith-bom:1.3.1")
 	}
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
-}
-
-flyway {
-	url = "jdbc:postgresql://localhost:5432/appdb"
-	user = "appuser"
-	password = "S@ecret123"
 }
