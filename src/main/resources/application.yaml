@@ -24,5 +24,23 @@ spring:
 management:
   server:
     port: 8082
+  tracing:
+    sampling:
+      probability: 1.0
+  endpoint:
+    health:
+      show-components: always
+      show-details: always
+    prometheus:
+      access: unrestricted
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  otlp:
+    tracing:
+      endpoint: http://localhost:4317/v1/traces
+      transport: grpc
+      compression: none
 server:
   port: 8080
