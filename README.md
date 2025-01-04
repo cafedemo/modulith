@@ -1,3 +1,6 @@
+![modulith workflow](https://github.com/cafedemo/modulith/actions/workflows/gradle.yml/badge.svg)  
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cafedemo_modulith&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=cafedemo_modulith)
+
 # Cafe Demo Application - Spring Modulith 
 
 This is a demo application to demonstrate the Spring Modulith concept. 
