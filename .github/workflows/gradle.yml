@@ -37,7 +37,7 @@ jobs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
 
     - name: Start database
-      run: docker-compose -f compose.yaml up -d
+      run: docker compose -f compose.yaml up -d
 
     - name: Build with Gradle Wrapper
       run: chmod +x gradlew && ./gradlew build
