@@ -1,4 +1,7 @@
 spring:
+  threads:
+    virtual:
+      enabled: true
   application:
     name: cafe
   lifecycle:
@@ -21,6 +24,13 @@ spring:
         schema-initialization:
           enabled: on
         schema: cafe
+      externalization:
+        enabled: false
+      republish-outstanding-events-on-restart: true
+      completion-mode: update
+  docker:
+    compose:
+      lifecycle-management: start_and_stop
 management:
   server:
     port: 8082
@@ -44,3 +54,8 @@ management:
       compression: none
 server:
   port: 8080
+logging:
+  pattern:
+    dateformat: dd-MMM-yyyy'T'HH:mm:ss.SSS
+    correlation: "[${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  include-application-name: false

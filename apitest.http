@@ -13,10 +13,10 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "name": "John Does1221",
+  "name": "John Doete741",
   "address": "1241 Main St",
   "phone": "566-555-5555",
-  "email": "testjohn2134@test.com"
+  "email": "testjohn1234@test.com"
 }
 
 ###
@@ -33,7 +33,7 @@ Accept: application/json
 }
 
 ###
-DELETE {{url}}/shop/14
+DELETE {{url}}/shop/7
 
 ###
 GET {{url}}/barista
@@ -44,7 +44,7 @@ POST {{url}}/barista
 Content-Type: application/json
 
 {
-  "name": "John Does101",
+  "name": "John Does109",
   "email": "testjohns1011@test.com",
   "shopId": 7
 }

@@ -25,6 +25,7 @@ public class Shop {
     private String address;
     private String phone;
     private String email;
+    @Builder.Default
     private List<Barista> baristas = new ArrayList<>();
 
     public Shop() {

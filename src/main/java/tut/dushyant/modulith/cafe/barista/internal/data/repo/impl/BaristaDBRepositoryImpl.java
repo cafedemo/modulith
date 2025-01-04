@@ -1,6 +1,6 @@
 package tut.dushyant.modulith.cafe.barista.internal.data.repo.impl;
 
-import org.springframework.jdbc.JdbcUpdateAffectedIncorrectNumberOfRowsException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import tut.dushyant.modulith.cafe.barista.internal.data.repo.BaristaDBRepository;
 import tut.dushyant.modulith.cafe.common.dto.barista.Barista;
+import tut.dushyant.modulith.cafe.util.exception.UpdateFailedException;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * BaristaDBRepositoryImpl
  */
 @Repository
+@Slf4j
 public class BaristaDBRepositoryImpl implements BaristaDBRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
@@ -30,19 +32,25 @@ public class BaristaDBRepositoryImpl implements BaristaDBRepository {
      */
     @Override
     public void addBarista(Barista barista) {
+        try {
+            int rows = jdbcTemplate.update(
+                    "INSERT INTO barista (name, email, shop_id)"
+                            + " VALUES (:name, :email, :shop_id)",
+                    new MapSqlParameterSource()
+                            .addValue("name", barista.getName())
+                            .addValue("email", barista.getEmail())
+                            .addValue("shop_id", barista.getShopId()));
 
-        int rows = jdbcTemplate.update(
-            "INSERT INTO barista (name, email, shop_id)"
-                + " VALUES (:name, :email, :shop_id)",
-            new MapSqlParameterSource()
-                    .addValue("name", barista.getName())
-                    .addValue("email", barista.getEmail())
-                    .addValue("shop_id", barista.getShopId()));
-
-        if (rows <=0 )
-            throw new JdbcUpdateAffectedIncorrectNumberOfRowsException(
-                "Failed to insert barista", 1, rows);
-
+            if (rows <= 0)
+                throw new UpdateFailedException(
+                        "Failed to insert barista with name: " + barista.getName() + " and email: " + barista.getEmail());
+        } catch (Exception e) {
+            if (e instanceof UpdateFailedException)
+                throw e;
+            log.error("Failed to insert barista with name: {} and email: {}", barista.getName(), barista.getEmail(), e);
+            throw new UpdateFailedException(
+                    "Failed to insert barista with name: " + barista.getName() + " and email: " + barista.getEmail());
+        }
     }
 
     /**
@@ -112,19 +120,27 @@ public class BaristaDBRepositoryImpl implements BaristaDBRepository {
      */
     @Override
     public Barista updateBarista(Barista barista) {
-        int rows = jdbcTemplate.update(
-            "UPDATE barista SET name = :name, email = :email, shop_id = :shop_id WHERE id = :id",
-            new MapSqlParameterSource()
-                .addValue("name", barista.getName())
-                .addValue("email", barista.getEmail())
-                .addValue("shop_id", barista.getShopId())
-                .addValue("id", barista.getId()));
+        try {
+            int rows = jdbcTemplate.update(
+                    "UPDATE barista SET name = :name, email = :email, shop_id = :shop_id WHERE id = :id",
+                    new MapSqlParameterSource()
+                            .addValue("name", barista.getName())
+                            .addValue("email", barista.getEmail())
+                            .addValue("shop_id", barista.getShopId())
+                            .addValue("id", barista.getId()));
 
-        if (rows <= 0)
-            throw new JdbcUpdateAffectedIncorrectNumberOfRowsException(
-                "Failed to update barista", 1, rows);
+            if (rows <= 0)
+                throw new UpdateFailedException(
+                        "Failed to update barista with id: " + barista.getId());
 
-        return searchBarista(barista);
+            return searchBarista(barista);
+        } catch (Exception e) {
+            if (e instanceof UpdateFailedException)
+                throw e;
+            log.error("Failed to update barista with id: {}", barista.getId(), e);
+            throw new UpdateFailedException(
+                    "Failed to update barista with id: " + barista.getId());
+        }
     }
 
     /**
@@ -133,15 +149,23 @@ public class BaristaDBRepositoryImpl implements BaristaDBRepository {
      */
     @Override
     public int deleteBarista(int id) {
-        int rows = jdbcTemplate.update(
-            "DELETE FROM barista WHERE id = :id",
-            new MapSqlParameterSource().addValue("id", id));
+        try {
+            int rows = jdbcTemplate.update(
+                    "DELETE FROM barista WHERE id = :id",
+                    new MapSqlParameterSource().addValue("id", id));
 
-        if (rows <= 0)
-            throw new JdbcUpdateAffectedIncorrectNumberOfRowsException(
-                "Failed to delete barista", 1, rows);
+            if (rows <= 0)
+                throw new UpdateFailedException(
+                        "Failed to delete barista with id: " + id);
 
-        return rows;
+            return rows;
+        } catch (Exception e) {
+            if (e instanceof UpdateFailedException)
+                throw e;
+            log.error("Failed to delete barista with id: {}", id, e);
+            throw new UpdateFailedException(
+                    "Failed to delete barista with id: " + id);
+        }
     }
 
     /**
@@ -151,15 +175,23 @@ public class BaristaDBRepositoryImpl implements BaristaDBRepository {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public int deleteBaristasForShop(int shopId) {
-        int rows = jdbcTemplate.update(
-            "DELETE FROM barista WHERE shop_id = :shop_id",
-            new MapSqlParameterSource().addValue("shop_id", shopId));
+        try {
+            int rows = jdbcTemplate.update(
+                    "DELETE FROM barista WHERE shop_id = :shop_id",
+                    new MapSqlParameterSource().addValue("shop_id", shopId));
 
-        if (rows <= 0)
-            throw new JdbcUpdateAffectedIncorrectNumberOfRowsException(
-                "Failed to delete baristas", 1, rows);
+            if (rows <= 0)
+                throw new UpdateFailedException(
+                        "Failed to delete baristas with shop id: " + shopId);
 
-        return rows;
+            return rows;
+        } catch (Exception e) {
+            if (e instanceof UpdateFailedException)
+                throw e;
+            log.error("Failed to delete baristas with shop id: {}", shopId, e);
+            throw new UpdateFailedException(
+                    "Failed to delete baristas with shop id: " + shopId);
+        }
     }
 
     /**
