@@ -4,7 +4,7 @@ GET {{url}}/shop
 Accept: application/json
 
 ###
-GET {{url}}/shop/12
+GET {{url}}/shop/7
 Accept: application/json
 
 ###
@@ -44,9 +44,9 @@ POST {{url}}/barista
 Content-Type: application/json
 
 {
-  "name": "John Does3111",
-  "email": "testjohns41111@test.com",
-  "shopId": 12
+  "name": "John Does101",
+  "email": "testjohns1011@test.com",
+  "shopId": 7
 }
 
 ###

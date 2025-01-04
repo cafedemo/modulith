@@ -33,17 +33,17 @@ dependencies {
 	implementation("org.springframework.modulith:spring-modulith-events-api")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
-    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	runtimeOnly("org.postgresql:postgresql")
 	runtimeOnly("org.springframework.boot:spring-boot-starter-actuator")
 	runtimeOnly("org.springframework.modulith:spring-modulith-actuator")
 	runtimeOnly("org.springframework.modulith:spring-modulith-observability")
+	runtimeOnly("org.springframework.boot:spring-boot-docker-compose")
 	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 	runtimeOnly("io.micrometer:micrometer-tracing-bridge-otel")
 	runtimeOnly("io.opentelemetry:opentelemetry-exporter-otlp")
-	runtimeOnly("org.flywaydb:flyway-database-postgresql:11.0.0")
+	runtimeOnly("org.flywaydb:flyway-database-postgresql:${gradle.extra["flywayVersion"]}")
 	runtimeOnly("org.springframework.modulith:spring-modulith-runtime")
 	runtimeOnly("org.springframework.modulith:spring-modulith-starter-insight")
 
@@ -58,7 +58,7 @@ dependencies {
 
 dependencyManagement {
 	imports {
-		mavenBom("org.springframework.modulith:spring-modulith-bom:1.3.1")
+		mavenBom("org.springframework.modulith:spring-modulith-bom:${gradle.extra["springModulithVersion"]}")
 	}
 }
 

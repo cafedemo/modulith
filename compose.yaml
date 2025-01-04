@@ -24,22 +24,12 @@ services:
       - MEMCACHED_THREADS=4
     ports:
       - '11211:11211'
-  tempo-init:
-    image: 'grafana/tempo:latest'
-    user: root
-    entrypoint:
-      - "chown"
-      - "10001:10001"
-      - "/var/tempo"
-    volumes:
-      - ./ops/tempo-data:/var/tempo
   tempo:
     image: 'grafana/tempo:latest'
     container_name: 'tempo'
     command: [ "-config.file=/etc/tempo.yaml" ]
     volumes:
       - ./ops/tempo.yaml:/etc/tempo.yaml
-      - ./ops/tempo-data:/var/tempo
     ports:
       - "14268:14268"  # jaeger ingest
       - "3200:3200"   # tempo
@@ -48,7 +38,6 @@ services:
       - "4318:4318"  # otlp http
       - "9411:9411"   # zipkin
     depends_on:
-      - tempo-init
       - memcached
   prometheus:
     image: prom/prometheus:latest

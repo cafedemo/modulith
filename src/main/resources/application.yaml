@@ -4,7 +4,7 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 20s
   datasource:
-    url: jdbc:postgresql://localhost:5432/cafe
+    url: jdbc:postgresql://localhost:5432/appdb
     username: appuser
     password: S@ecret123
     hikari:
