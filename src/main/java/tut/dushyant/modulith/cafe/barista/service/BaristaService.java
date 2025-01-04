@@ -14,7 +14,7 @@ import tut.dushyant.modulith.cafe.barista.events.BaristaUpdateEvent;
 import tut.dushyant.modulith.cafe.barista.events.BaristasDeleteForShopEvent;
 import tut.dushyant.modulith.cafe.barista.internal.data.repo.BaristaDBRepository;
 import tut.dushyant.modulith.cafe.common.dto.barista.Barista;
-import tut.dushyant.modulith.cafe.util.exception.BadRequestException;
+import tut.dushyant.modulith.cafe.common.exception.BadRequestException;
 
 import java.util.List;
 import java.util.regex.Pattern;

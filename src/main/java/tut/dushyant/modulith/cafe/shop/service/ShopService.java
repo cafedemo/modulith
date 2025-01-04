@@ -15,9 +15,9 @@ import tut.dushyant.modulith.cafe.shop.events.ShopCreatedEvent;
 import tut.dushyant.modulith.cafe.shop.events.ShopDeletedEvent;
 import tut.dushyant.modulith.cafe.shop.events.ShopUpdateEvent;
 import tut.dushyant.modulith.cafe.shop.internal.data.repo.ShopDBRepository;
-import tut.dushyant.modulith.cafe.util.exception.BadRequestException;
-import tut.dushyant.modulith.cafe.util.exception.NotFoundException;
-import tut.dushyant.modulith.cafe.util.exception.UpdateFailedException;
+import tut.dushyant.modulith.cafe.common.exception.BadRequestException;
+import tut.dushyant.modulith.cafe.common.exception.NotFoundException;
+import tut.dushyant.modulith.cafe.common.exception.UpdateFailedException;
 
 import java.util.List;
 import java.util.regex.Pattern;

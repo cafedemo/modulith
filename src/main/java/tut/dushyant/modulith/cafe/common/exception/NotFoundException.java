@@ -1,4 +1,4 @@
-package tut.dushyant.modulith.cafe.util.exception;
+package tut.dushyant.modulith.cafe.common.exception;
 
 public class NotFoundException extends CafeAppException {
 

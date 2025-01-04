@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import tut.dushyant.modulith.cafe.common.dto.shop.Shop;
 import tut.dushyant.modulith.cafe.shop.internal.data.repo.ShopDBRepository;
-import tut.dushyant.modulith.cafe.util.exception.UpdateFailedException;
+import tut.dushyant.modulith.cafe.common.exception.UpdateFailedException;
 
 import java.util.List;
 

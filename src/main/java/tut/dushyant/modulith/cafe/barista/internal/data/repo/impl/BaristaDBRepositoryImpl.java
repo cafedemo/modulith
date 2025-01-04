@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import tut.dushyant.modulith.cafe.barista.internal.data.repo.BaristaDBRepository;
 import tut.dushyant.modulith.cafe.common.dto.barista.Barista;
-import tut.dushyant.modulith.cafe.util.exception.UpdateFailedException;
+import tut.dushyant.modulith.cafe.common.exception.UpdateFailedException;
 
 import java.util.List;
 
