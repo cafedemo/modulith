@@ -4,6 +4,7 @@
 # Cafe Demo Application - Spring Modulith 
 
 This is a demo application to demonstrate the Spring Modulith concept. 
+An introduction for Spring Modulith can be found [here](./docs/intro.md).
 
 ## Modules
 
