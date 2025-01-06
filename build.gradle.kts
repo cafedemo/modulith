@@ -38,6 +38,7 @@ dependencies {
 	runtimeOnly("org.springframework.boot:spring-boot-starter-actuator")
 	runtimeOnly("org.springframework.modulith:spring-modulith-actuator")
 	runtimeOnly("org.springframework.modulith:spring-modulith-observability")
+	runtimeOnly("org.springframework.modulith:spring-modulith-starter-insight")
 	runtimeOnly("org.springframework.boot:spring-boot-docker-compose")
 	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 	runtimeOnly("io.micrometer:micrometer-tracing-bridge-otel")

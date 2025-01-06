@@ -28,12 +28,13 @@ spring:
         enabled: false
       republish-outstanding-events-on-restart: true
       completion-mode: update
+    detection-strategy: explicitly-annotated
   docker:
     compose:
       lifecycle-management: start_and_stop
 management:
   server:
-    port: 8082
+    port: 9080
   tracing:
     sampling:
       probability: 1.0
