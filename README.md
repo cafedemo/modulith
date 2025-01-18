@@ -37,5 +37,10 @@ This application has three modules:
 ./gradlew clean bootRun
 ```
 
+### Sample API and Grafana
+
+API to test application are written in file (apitest.http)(apitest.http)
+
+Application uses Prometheus (for metrics) and Grafana Tempo (for traces) to capture observability.
 
 

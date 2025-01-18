@@ -4,7 +4,7 @@ GET {{url}}/shop
 Accept: application/json
 
 ###
-GET {{url}}/shop/7
+GET {{url}}/shop/4
 Accept: application/json
 
 ###
@@ -46,7 +46,7 @@ Content-Type: application/json
 {
   "name": "John Does109",
   "email": "testjohns1011@test.com",
-  "shopId": 7
+  "shopId": 4
 }
 
 ###
@@ -55,11 +55,11 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "id": 18,
+  "id": 10,
   "name": "John Does",
   "email": "testjohns242@test.com",
-  "shopId": 9
+  "shopId": 4
 }
 
 ###
-DELETE {{url}}/barista/18
+DELETE {{url}}/barista/10

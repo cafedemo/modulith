@@ -16,6 +16,8 @@ services:
       - type: 'bind'
         source: './db/postgresql.conf'
         target: '/etc/postgresql/postgresql.conf'
+    networks:
+      - opsnet
   memcached:
     image: 'memcached:latest'
     container_name: 'memcached'
@@ -24,6 +26,8 @@ services:
       - MEMCACHED_THREADS=4
     ports:
       - '11211:11211'
+    networks:
+      - opsnet
   tempo:
     image: 'grafana/tempo:latest'
     container_name: 'tempo'
@@ -39,6 +43,16 @@ services:
       - "9411:9411"   # zipkin
     depends_on:
       - memcached
+    networks:
+      - opsnet
+  loki:
+    image: 'grafana/loki:latest'
+    container_name: 'loki'
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - opsnet
   prometheus:
     image: prom/prometheus:latest
     container_name: 'prometheus'
@@ -51,6 +65,8 @@ services:
       - ./ops/prometheus.yaml:/etc/prometheus.yaml
     ports:
       - "9090:9090"
+    networks:
+      - opsnet
   grafana:
     image: 'grafana/grafana:latest'
     container_name: 'grafana'
@@ -64,3 +80,9 @@ services:
       - GF_INSTALL_PLUGINS=https://storage.googleapis.com/integration-artifacts/grafana-exploretraces-app/grafana-exploretraces-app-latest.zip;grafana-traces-app
     ports:
       - "3000:3000"
+    networks:
+      - opsnet
+networks:
+  opsnet:
+    driver: bridge
+    name: opsnet

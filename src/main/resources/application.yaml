@@ -14,15 +14,15 @@ spring:
       schema: cafe
       auto-commit: true
   flyway:
-    enabled: on
+    enabled: true
     locations: classpath:db
-    create-schemas: on
+    create-schemas: true
     schemas: cafe
   modulith:
     events:
       jdbc:
         schema-initialization:
-          enabled: on
+          enabled: true
         schema: cafe
       externalization:
         enabled: false
@@ -31,10 +31,10 @@ spring:
     detection-strategy: explicitly-annotated
   docker:
     compose:
-      lifecycle-management: start_and_stop
+      lifecycle-management: START_AND_STOP
 management:
   server:
-    port: 9080
+    port: 9990
   tracing:
     sampling:
       probability: 1.0
@@ -49,6 +49,11 @@ management:
       exposure:
         include: "*"
   otlp:
+    logging:
+      endpoint: http://localhost:3100/otlp
+      transport: http
+      export:
+        enabled: true
     tracing:
       endpoint: http://localhost:4317/v1/traces
       transport: grpc
