@@ -58,6 +58,15 @@ management:
       endpoint: http://localhost:4317/v1/traces
       transport: grpc
       compression: none
+    metrics:
+      export:
+        url: http://localhost:9090/api/v1/otlp/v1/metrics
+        enabled: true
+        step: 15s
+        read-timeout: 10s
+        connect-timeout: 10s
+        headers:
+          source: otlp
 server:
   port: 8080
 logging:

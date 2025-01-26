@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import io.micrometer.registry.otlp.OtlpMeterRegistry;
 import tut.dushyant.modulith.cafe.barista.service.BaristaService;
 import tut.dushyant.modulith.cafe.common.dto.shop.Shop;
 import tut.dushyant.modulith.cafe.shop.events.ShopCreatedEvent;
@@ -20,6 +21,7 @@ import tut.dushyant.modulith.cafe.common.exception.NotFoundException;
 import tut.dushyant.modulith.cafe.common.exception.UpdateFailedException;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 /**
@@ -34,15 +36,19 @@ public class ShopService {
     private static final Pattern INTEGER_PATTERN = Pattern.compile("-?\\d+");
     private final TransactionTemplate transactionTemplate;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final AtomicInteger shopCounter;
 
     public ShopService(ShopDBRepository repo,
                        BaristaService baristaService,
                        PlatformTransactionManager platformTransactionManager,
-                       ApplicationEventPublisher applicationEventPublisher) {
+                       ApplicationEventPublisher applicationEventPublisher,
+                       OtlpMeterRegistry meterRegistry) {
         this.repo = repo;
         this.baristaService = baristaService;
         this.transactionTemplate = new TransactionTemplate(platformTransactionManager);
         this.applicationEventPublisher = applicationEventPublisher;
+        this.shopCounter = meterRegistry.gauge("cafe.shop.count", new AtomicInteger(0));
+        this.shopCounter.set(repo.getShops().size());
     }
 
     /**
@@ -54,6 +60,7 @@ public class ShopService {
     public Shop addShop(Shop shop) {
         Shop newShop = repo.addShop(shop);
         applicationEventPublisher.publishEvent(new ShopCreatedEvent(newShop.getId()));
+        this.shopCounter.set(this.shopCounter.incrementAndGet());
         return newShop;
     }
 
@@ -93,6 +100,7 @@ public class ShopService {
                 throw new UpdateFailedException("Failed to delete shop with id " + id);
             }
             applicationEventPublisher.publishEvent(new ShopDeletedEvent(Integer.parseInt(deletedShopId)));
+            this.shopCounter.set(this.shopCounter.decrementAndGet());
         } else {
             throw new BadRequestException("Invalid shop id: " + id);
         }

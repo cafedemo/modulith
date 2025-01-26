@@ -13,8 +13,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "name": "John Doete25441",
-  "address": "1241 Main St",
+  "name": "John Doet41",
+  "address": "124 Main St",
   "phone": "566-555-5555",
   "email": "testjohn1234@test.com"
 }

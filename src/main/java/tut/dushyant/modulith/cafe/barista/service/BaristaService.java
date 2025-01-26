@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.AllArgsConstructor;
+import io.micrometer.registry.otlp.OtlpMeterRegistry;
 import tut.dushyant.modulith.cafe.barista.events.BaristaCreateEvent;
 import tut.dushyant.modulith.cafe.barista.events.BaristaDeleteEvent;
 import tut.dushyant.modulith.cafe.barista.events.BaristaUpdateEvent;
@@ -17,6 +17,7 @@ import tut.dushyant.modulith.cafe.common.dto.barista.Barista;
 import tut.dushyant.modulith.cafe.common.exception.BadRequestException;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 /**
@@ -25,12 +26,21 @@ import java.util.regex.Pattern;
 @Service
 @NamedInterface("barista-service")
 @Slf4j
-@AllArgsConstructor
 public class BaristaService {
 
     private final BaristaDBRepository repo;
     private static final Pattern INTEGER_PATTERN = Pattern.compile("-?\\d+");
     private final ApplicationEventPublisher eventPublisher;
+    private AtomicInteger baristaCounter;
+
+    public BaristaService(BaristaDBRepository repo, 
+                        ApplicationEventPublisher eventPublisher, 
+                        OtlpMeterRegistry meterRegistry) {
+        this.repo = repo;
+        this.eventPublisher = eventPublisher;
+        this.baristaCounter = meterRegistry.gauge("cafe.barista.count", new AtomicInteger(0));
+        this.baristaCounter.set(repo.getBaristas().size());
+    }
 
     /**
      * Add a barista
@@ -41,6 +51,7 @@ public class BaristaService {
     public Barista addBarista(Barista barista) {
         repo.addBarista(barista);
         eventPublisher.publishEvent(new BaristaCreateEvent(barista.getId()));
+        this.baristaCounter.set(this.baristaCounter.incrementAndGet());
         return repo.searchBarista(barista);
     }
 
@@ -66,6 +77,7 @@ public class BaristaService {
             int rows = repo.deleteBarista(Integer.parseInt(id));
             log.atInfo().log("Delete barista with id: <{}> affected rows: <{}>",id,rows);
             eventPublisher.publishEvent(new BaristaDeleteEvent(Integer.parseInt(id)));
+            this.baristaCounter.set(this.baristaCounter.decrementAndGet());
             return;
         }
 

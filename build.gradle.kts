@@ -1,6 +1,6 @@
 plugins {
 	java
-	id("org.springframework.boot") version "3.4.1"
+	id("org.springframework.boot") version "3.4.2"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("org.flywaydb.flyway") version "11.0.0"
 }
@@ -31,6 +31,7 @@ dependencies {
 	implementation("org.springframework.modulith:spring-modulith-starter-jdbc")
 	implementation("org.springframework.modulith:spring-modulith-events-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("io.micrometer:micrometer-registry-otlp")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
@@ -40,7 +41,6 @@ dependencies {
 	runtimeOnly("org.springframework.modulith:spring-modulith-observability")
 	runtimeOnly("org.springframework.modulith:spring-modulith-starter-insight")
 	runtimeOnly("org.springframework.boot:spring-boot-docker-compose")
-	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 	runtimeOnly("io.micrometer:micrometer-tracing-bridge-otel")
 	runtimeOnly("io.opentelemetry:opentelemetry-exporter-otlp")
 	runtimeOnly("org.flywaydb:flyway-database-postgresql:${gradle.extra["flywayVersion"]}")

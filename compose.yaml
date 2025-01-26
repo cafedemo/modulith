@@ -54,13 +54,15 @@ services:
     networks:
       - opsnet
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.1.0
     container_name: 'prometheus'
     command:
       - --config.file=/etc/prometheus.yaml
       - --web.enable-remote-write-receiver
+      - --web.enable-otlp-receiver
       - --enable-feature=exemplar-storage
       - --enable-feature=native-histograms
+      - --log.level=debug
     volumes:
       - ./ops/prometheus.yaml:/etc/prometheus.yaml
     ports:
